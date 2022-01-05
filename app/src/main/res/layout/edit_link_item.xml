@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+android:layout_height="wrap_content"
+android:layout_width="match_parent"
+app:flow_horizontalAlign="center"
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+app:cardCornerRadius="8dp"
+app:cardElevation="8dp"
+android:layout_margin="5dp">
+
+
+    <TextView
+        android:id="@+id/textLinkEdit"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/rounded_corner"
+        android:padding="10dp"
+        android:text="www.website.com/sampeuser123"
+        android:textColor="@color/white"
+        android:fontFamily="@font/broted_young_plant_regular"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageButton
+        android:id="@+id/delete_button"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_delete"
+        android:backgroundTint="@android:color/transparent"/>
+
+</androidx.cardview.widget.CardView>
