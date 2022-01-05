@@ -25,17 +25,25 @@
         android:layout_marginTop="90dp"/>
 
 
-    <EditText
-        android:id="@+id/registerUsername"
+
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20dp"
-        android:hint="Username"
-        android:layout_marginTop="90dp"
-        android:fontFamily="@font/broted_young_plant_regular"
-        android:padding="20dp"
-        />
 
+        >
+        <EditText
+            android:id="@+id/registerUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:hint="Username"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/broted_young_plant_regular"
+            android:backgroundTint="@android:color/transparent"/>
+
+
+
+    </com.google.android.material.textfield.TextInputLayout>
 
 
 

@@ -31,17 +31,25 @@ class ProfileActivity: AppCompatActivity() {
         linkList = bundle!!.getStringArrayList("links_bundle")!!
 
         setRecyclerView()
+
         binding.editbtn.setOnClickListener{
-            //Go to profile activity
-            val gotoEditProfileActivity = Intent(applicationContext, EditProfileActivity::class.java)
+            var editbundle = Bundle()
+            editbundle.putString("user_bundle", username)
+            editbundle.putString("pass_bundle", password)
+            editbundle.putStringArrayList("links_bundle", bundle!!.getStringArrayList("links_bundle"))
+            var gotoEditProfileActivity = Intent(applicationContext, EditProfileActivity::class.java)
+
+            gotoEditProfileActivity.putExtras(editbundle)
+
             startActivity(gotoEditProfileActivity)
+
         }
 
     }
 
 //    private fun populateList() {
 //
-//        //TODO: Change to user array
+//
 //        this.LinkList.add("www.website/sampleLink1");
 //        this.LinkList.add("www.website/sampleLink2");
 //        this.LinkList.add("www.website/sampleLink3");

@@ -4,14 +4,14 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import ph.edu.dlsu.mobdeve.g24.mco.seedlink.databinding.EditLinkItemBinding
+import ph.edu.dlsu.mobdeve.g24.mco.seedlink.databinding.EditItemBinding
 
 class EditProfileAdapter (private val context: Context, private val LinkList:MutableList<String>)
     : RecyclerView.Adapter<EditProfileAdapter.ProfileEditHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileEditHolder {
-        val binding = EditLinkItemBinding.inflate(LayoutInflater.from(context), parent, false)
+        val binding = EditItemBinding.inflate(LayoutInflater.from(context), parent, false)
         return ProfileEditHolder(binding)
 
     }
@@ -21,7 +21,7 @@ class EditProfileAdapter (private val context: Context, private val LinkList:Mut
     }
 
     inner class ProfileEditHolder(
-        layoutBinding: EditLinkItemBinding
+        layoutBinding: EditItemBinding
     ) : RecyclerView.ViewHolder(layoutBinding.root) {
 
         private val binding = layoutBinding

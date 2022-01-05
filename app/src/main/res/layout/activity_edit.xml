@@ -47,6 +47,7 @@
 
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/editUsernameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
@@ -55,7 +56,7 @@
                     android:id="@+id/editUsername"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Old Username"
+                    android:hint="Username:"
                     android:fontFamily="sans-serif-black"
                     android:layout_marginTop="15dp"
                     android:backgroundTint="@android:color/transparent"/>
@@ -67,6 +68,7 @@
 
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/editPasswordLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:passwordToggleEnabled="true"
@@ -76,7 +78,7 @@
                     android:id="@+id/editPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Old Password"
+                    android:hint="Password:"
                     android:fontFamily="sans-serif-black"
                     android:layout_marginTop="15dp"
                     android:backgroundTint="@android:color/transparent"/>

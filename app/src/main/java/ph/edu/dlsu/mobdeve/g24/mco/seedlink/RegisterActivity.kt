@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
+import androidx.core.text.trimmedLength
 import ph.edu.dlsu.mobdeve.g24.mco.seedlink.databinding.ActivityRegisterBinding
 
 class RegisterActivity : AppCompatActivity() {
@@ -28,17 +29,24 @@ class RegisterActivity : AppCompatActivity() {
 
             //TODO: ADD POSTS
             if (confirmPassword.equals(password)) {
-                var temp: UserClass
-                temp = UserClass(username, password, links)
-                var bundle = Bundle()
-                bundle.putString("user_bundle", temp.username)
-                bundle.putString("pass_bundle", temp.pass)
-                bundle.putStringArrayList("links_bundle", temp.links)
-                var gotoProfileActivity = Intent(applicationContext, ProfileActivity::class.java)
 
-                gotoProfileActivity.putExtras(bundle)
+                //TODO: Check input if it passed restrictions
 
-                startActivity(gotoProfileActivity)
+
+                if(checkUsername(username) && checkPassword(password)) {
+                    var temp: UserClass
+                    temp = UserClass(username, password, links)
+                    var bundle = Bundle()
+                    bundle.putString("user_bundle", temp.username)
+                    bundle.putString("pass_bundle", temp.pass)
+                    bundle.putStringArrayList("links_bundle", temp.links)
+                    var gotoProfileActivity =
+                        Intent(applicationContext, ProfileActivity::class.java)
+
+                    gotoProfileActivity.putExtras(bundle)
+
+                    startActivity(gotoProfileActivity)
+                }
             } else
                 Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
 
@@ -56,5 +64,55 @@ class RegisterActivity : AppCompatActivity() {
         temp.add("www.website/sampleLink5");
         temp.add("www.website/sampleLink6");
 
+    }
+
+
+    private fun checkUsername(username: String ): Boolean {
+        var b = true
+
+        //usernameS: MIN: 8; MAX:15
+        if(username.trimmedLength() < 8 || username.trimmedLength() > 15)
+        {
+            Toast.makeText(this, "Usernames must have a minimum of 8 characters and a maximum of 15.", Toast.LENGTH_SHORT).show();
+            b=false
+        }
+
+        //Check for spaces
+        var result = username.filter { it.isWhitespace() }
+        if(result.isNotBlank())
+        {
+            Toast.makeText(this, "Passwords must not contain any white spaces.", Toast.LENGTH_SHORT).show();
+            b= false
+        }
+        //Check if username is already taken
+
+        return b
+    }
+
+    private fun checkPassword(password: String): Boolean {
+        var b = true
+
+        //passwords: MIN: 10; MAX: 15
+        if(password.trimmedLength() < 10 || password.trimmedLength() > 15)
+        {
+            Toast.makeText(this, "Passwords must have a minimum of 10 characters and a maximum of 15.", Toast.LENGTH_SHORT).show();
+            b= false
+        }
+        //Must contain numbers
+        var result1 = password.filter { it.isDigit() }
+        if(result1.isBlank() || result1.length < 4)
+        {
+            Toast.makeText(this, "Passwords must contain at least 4 numbers.", Toast.LENGTH_SHORT).show();
+            b= false
+        }
+
+        //Check for spaces
+        var result2 = password.filter { it.isWhitespace() }
+        if(result2.isNotBlank())
+        {
+            Toast.makeText(this, "Passwords must not contain any white spaces.", Toast.LENGTH_SHORT).show();
+            b= false
+        }
+        return b
     }
 }
