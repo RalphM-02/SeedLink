@@ -10,6 +10,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SeedLink">
         <activity
+            android:name=".EditProfileActivity"
+            android:exported="false"
+            android:label="@string/title_activity_edit_profile"
+            android:theme="@style/Theme.SeedLink.NoActionBar" />
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

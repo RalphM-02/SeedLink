@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".MainActivity"
+    tools:context=".RegisterActivity"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:layout_constraintTop_toTopOf="parent"
@@ -26,7 +26,7 @@
 
 
     <EditText
-        android:id="@+id/loginUsername"
+        android:id="@+id/registerUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20dp"
@@ -37,6 +37,8 @@
         />
 
 
+
+
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -44,13 +46,33 @@
 
         >
         <EditText
-        android:id="@+id/loginPassword"
+            android:id="@+id/registerPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:hint="Password"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/broted_young_plant_regular"
+            android:backgroundTint="@android:color/transparent"/>
+
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20dp"
-        android:hint="Password"
-        android:layout_marginTop="15dp"
-        android:fontFamily="@font/broted_young_plant_regular"
+        app:passwordToggleEnabled="true"
+
+        >
+        <EditText
+            android:id="@+id/registerConfirmPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:hint="Confirm Password"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/broted_young_plant_regular"
             android:backgroundTint="@android:color/transparent"/>
 
 
@@ -58,22 +80,12 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/loginbtn"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:text="Login"
-        android:layout_marginTop="100dp"
-        android:backgroundTint="@color/darkGreen"/>
-
-    <Button
-        android:id="@+id/signupbtn"
+        android:id="@+id/signupConfirmbtn"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:text="Sign up"
-        android:layout_marginTop="10dp"
-        android:backgroundTint="@color/lightGreen"/>
-
-
+        android:layout_marginTop="80dp"
+        android:backgroundTint="@color/darkGreen"/>
 
 
 

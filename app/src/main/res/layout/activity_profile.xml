@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProfileActivity">
+
+
+    <LinearLayout
+        android:id="@+id/profileLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:orientation="vertical"
+        android:padding="10dp"
+        app:flow_horizontalAlign="center"
+        app:flow_verticalAlign="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.035">
+
+        <ImageView
+            android:id="@+id/viewPic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="100dp"
+            android:maxHeight="100dp"
+            android:minWidth="100dp"
+            android:minHeight="100dp"
+            android:src="@drawable/ic_profile_pic" />
+
+        <Button
+            android:id="@+id/editbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:padding="5dp"
+            android:text="Edit Profile"
+            android:textSize="10dp"
+            android:textColor="@color/darkGreen"
+            style="?android:attr/borderlessButtonStyle"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-black"
+                android:text="Username: "
+                android:textColor="@color/mediumGreen" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/viewUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_corner"
+                android:padding="5dp"
+                android:text="sampleUser1234"
+                android:textColor="@color/white"
+                app:fontFamily="sans-serif-black" />
+        </LinearLayout>
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-black"
+                android:text="Password: "
+                android:textColor="@color/mediumGreen" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/viewPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_corner"
+                android:padding="5dp"
+                android:text="samplePass1234"
+                android:textColor="@color/white"
+                app:fontFamily="sans-serif-black" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/viewLinkLayout"
+       android:layout_width="match_parent"
+       android:layout_height="0dp"
+       android:layout_weight="1"
+       android:fillViewport="true"
+       app:layout_constraintTop_toBottomOf="@id/profileLayout">
+
+
+       <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/viewLinkList"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"/>
+
+
+   </ScrollView>
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

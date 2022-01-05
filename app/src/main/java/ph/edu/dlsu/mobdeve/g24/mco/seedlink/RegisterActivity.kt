@@ -1,30 +1,33 @@
 package ph.edu.dlsu.mobdeve.g24.mco.seedlink
 
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
-import ph.edu.dlsu.mobdeve.g24.mco.seedlink.databinding.ActivityMainBinding
 import ph.edu.dlsu.mobdeve.g24.mco.seedlink.databinding.ActivityRegisterBinding
 
-class MainActivity : AppCompatActivity() {
+class RegisterActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityRegisterBinding
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding!!.loginbtn.setOnClickListener {
-            var password = binding.loginPassword.text.toString()
-            var username = binding.loginUsername.text.toString()
+
+        //TODO: click on sign up confirm btn when enter is pressed
+        binding.signupConfirmbtn.setOnClickListener {
+            var confirmPassword = binding.registerConfirmPassword.text.toString()
+            var password = binding.registerPassword.text.toString()
+            var username = binding.registerUsername.text.toString()
             var links = ArrayList<String>()
             populateList(links)
 
             //TODO: ADD POSTS
+            if (confirmPassword.equals(password)) {
                 var temp: UserClass
                 temp = UserClass(username, password, links)
                 var bundle = Bundle()
@@ -36,19 +39,14 @@ class MainActivity : AppCompatActivity() {
                 gotoProfileActivity.putExtras(bundle)
 
                 startActivity(gotoProfileActivity)
+            } else
+                Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
 
 
         }
 
-
-        binding!!.signupbtn.setOnClickListener {
-
-            //Go to profile activity
-            val gotoProfileActivity = Intent(applicationContext, RegisterActivity::class.java)
-            startActivity(gotoProfileActivity)
-
-        }
     }
+
     private fun populateList(temp: ArrayList<String>) {
 
         temp.add("www.website/sampleLink1");
@@ -59,5 +57,4 @@ class MainActivity : AppCompatActivity() {
         temp.add("www.website/sampleLink6");
 
     }
-
 }
