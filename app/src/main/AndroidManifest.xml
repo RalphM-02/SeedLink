@@ -17,6 +17,9 @@
             android:name=".ProfilePicActivity"
             android:exported="false" />
         <activity
+            android:name=".CreatePostActivity"
+            android:exported="false" />
+        <activity
             android:name=".EditProfileActivity"
             android:exported="false" />
         <activity
