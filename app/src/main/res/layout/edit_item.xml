@@ -19,7 +19,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:src="@drawable/ic_delete"
-            android:backgroundTint="@android:color/transparent"/>
+            android:backgroundTint="@android:color/transparent"
+            android:contentDescription="Delete Button"/>
         <TextView
             android:id="@+id/textLinkEdit"
             android:layout_width="match_parent"

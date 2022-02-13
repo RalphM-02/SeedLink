@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/addLinkLayout"
+        android:fontFamily="sans-serif-black"
+        android:text="Add New Link"
+        android:textAlignment="center"
+        android:textColor="@color/darkGreen"
+        android:layout_marginVertical="20dp"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/addLinkLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/titleText"
+
+        >
+        <EditText
+            android:id="@+id/addLinkEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter your link:"
+            android:fontFamily="sans-serif-black"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/white"
+            android:backgroundTint="@android:color/transparent"/>
+
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/addLinkBtn"
+        app:layout_constraintTop_toBottomOf="@id/addLinkLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:textColor="@color/darkGreen"
+        android:layout_margin="30dp"
+        android:text="Add"
+        />
+    <Button
+        android:id="@+id/cancelLinkBtn"
+        app:layout_constraintTop_toBottomOf="@id/addLinkBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:text="Cancel"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

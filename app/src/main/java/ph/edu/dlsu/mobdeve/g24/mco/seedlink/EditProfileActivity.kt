@@ -1,95 +1,177 @@
 package ph.edu.dlsu.mobdeve.g24.mco.seedlink
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Handler
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.text.trimmedLength
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import ph.edu.dlsu.mobdeve.g24.mco.seedlink.dao.*
 import ph.edu.dlsu.mobdeve.g24.mco.seedlink.databinding.ActivityEditBinding
+import android.graphics.BitmapFactory
+
+import android.graphics.Bitmap
+
+
+
+
+
 
 class EditProfileActivity : AppCompatActivity() {
 
-    private lateinit var adapter: ProfileAdapter
+    private lateinit var adapter: EditProfileAdapter
     private lateinit var binding: ActivityEditBinding
+    private lateinit var addLinkViewModel: AddLinkViewModel
     private var linkList: MutableList<String> = mutableListOf()
+    lateinit var linkDao: LinkDao
+    lateinit var userDao: UserDao
+    lateinit var pfpDao: PfpDao
+    lateinit var userOld: UserClass
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditBinding.inflate(layoutInflater)
+        linkDao = LinkDaoDatabase(applicationContext)
+        userDao = UserDaoDatabase(applicationContext)
+        pfpDao = PfpDaoDatabase(applicationContext)
         setContentView(binding.root)
 
 
 
-
         var bundle = intent.extras
-        var username = bundle!!.getString("user_bundle")
-        var password = bundle!!.getString("pass_bundle")
-        binding.editPasswordLayout.hint = "Old Password: " + password
-        binding.editUsernameLayout.hint = "Old Username: " + username
+        var id = bundle!!.getInt("id_bundle")
 
-        linkList = bundle!!.getStringArrayList("links_bundle")!!
-        setRecyclerView()
+        //Stores previous info
+        if( userDao.getUser(id) != null)
+            userOld = userDao.getUser(id)!!
+        else
+            Toast.makeText(
+                this,
+                "Can't Find User Profile.",
+                Toast.LENGTH_SHORT
+            )
+                .show()
+        var image = pfpDao.getPfp(id)
+
+        if(image != null){
+            val bmp = BitmapFactory.decodeByteArray(image, 0, image.size)
+            binding.viewPic.setImageBitmap(bmp)
+
+        }else
+            binding.viewPic.setImageResource(R.drawable.ic_profile_pic)
 
 
-        binding.savebtn.setOnClickListener(){
+        binding.editPasswordLayout.hint = "Old Password: " + userOld.pass
+        binding.editUsernameLayout.hint = "Old Username: " + userOld.username
 
+
+
+        if(linkDao.getLinks(userOld.id) == null)
+            linkList = mutableListOf()
+        else
+            linkList = linkDao.getLinks(userOld.id)!!
+
+        setRecyclerView(userOld.username)
+
+
+        binding.addbtn.setOnClickListener(){
+            if (userOld.username != null) {
+
+                AddLinkDialog().show(supportFragmentManager, AddLinkDialog.TAG)
+
+                addLinkViewModel = ViewModelProvider(this).get(AddLinkViewModel::class.java)
+                addLinkViewModel.link.observe(this, Observer {
+
+                    if(it.equals(""))
+                        Toast.makeText(this, "Link Addition Unsuccessful: Empty String", Toast.LENGTH_SHORT).show()
+                    else {
+                        val res = linkDao.addLink(userOld.id, it)
+
+                        if (res > 0) {
+                            adapter.addLink(it)
+                            Toast.makeText(
+                                this,
+                                "Link Addition Successful.",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                        }
+                        else
+                            Toast.makeText(
+                                this,
+                                "Link Addition Unsuccessful: LinkDB Error",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                    }
+                })
+            }else
+                Toast.makeText(this, "Link Addition Unsuccessful: UserDB Error ", Toast.LENGTH_SHORT).show()
+
+
+        }
+        binding.savebtn.setOnClickListener() {
 
             //Input
-            val user = binding.editUsername.text.toString()
-            val pass = binding.editPassword.text.toString()
+            var user = binding.editUsername.text.toString()
+            var pass = binding.editPassword.text.toString()
+
+            if (checkUsername(user) && checkPassword(pass)) {
+                //Save Changes to db
+                if (user.equals(""))
+                    user = userOld.username
+
+                if (pass.equals(""))
+                    pass = userOld.pass.toString()
+
+                //TODO: Remove whitespaces
+
+                var temp = UserClass(userOld!!.id, user, pass)
+                userDao.updateUser(temp)
 
 
-            //Copy the contents of previous bundle
-            var editbundle = Bundle()
-            editbundle.putString("user_bundle",username )
-            editbundle.putString("pass_bundle", password)
-            editbundle.putStringArrayList("links_bundle", bundle!!.getStringArrayList("links_bundle"))
-
-            if(user.isNotBlank()) //changes in username
-            {
-                editbundle.putString("user_bundle",user)
-            }
-
-            if(pass.isNotBlank()) //changes in password
-            {
-                editbundle.putString("user_bundle",pass)
-            }
-
-            if(checkUsername(user) && checkPassword(pass)) {
+                //Prep for next activity
+                var editbundle = Bundle()
+                editbundle.putString("user_bundle", user)
+                editbundle.putString("pass_bundle", pass)
                 var gotoProfileActivity = Intent(applicationContext, ProfileActivity::class.java)
 
                 gotoProfileActivity.putExtras(editbundle)
 
                 startActivity(gotoProfileActivity)
+            } else
+                Toast.makeText(this, "Save Unsuccessful", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.editPic.setOnClickListener(){
+            var editbundle2 = Bundle()
+            if (userOld != null) {
+                editbundle2.putInt("id_bundle", userOld.id)
+                val gotoProfilePicActivity = Intent(applicationContext, ProfilePicActivity::class.java)
+                gotoProfilePicActivity.putExtras(editbundle2)
+                startActivity(gotoProfilePicActivity)
             }
+            else
+                Toast.makeText(this, "Can't Edit Pfp: UserDB Error", Toast.LENGTH_SHORT).show()
+
+
 
         }
-        //TODO: Upload Pic
-//        binding.editPic.setOnClickListener(){
-//            val gotoProfilePicActivity = Intent(applicationContext, ProfilePicActivity::class.java)
-//            startActivity(gotoProfilePicActivity)
-//
-//        }
-
-    }
-
-    private fun populateList() {
-        this.linkList.add("www.website/sampleLink1");
-        this.linkList.add("www.website/sampleLink2");
-        this.linkList.add("www.website/sampleLink3");
-        this.linkList.add("www.website/sampleLink4");
-        this.linkList.add("www.website/sampleLink5");
-        this.linkList.add("www.website/sampleLink6");
-
 
 
 
     }
 
-    private fun setRecyclerView() {
-        adapter = ProfileAdapter(this,linkList)
+
+
+    private fun setRecyclerView(username: String) {
+        adapter = EditProfileAdapter(this,linkList, userOld.id)
         binding.editLinkList.adapter = adapter
         binding.editLinkList.layoutManager = LinearLayoutManager(this)
     }
@@ -101,18 +183,31 @@ class EditProfileActivity : AppCompatActivity() {
         //usernameS: MIN: 8; MAX:15
         if(username.trimmedLength() < 8 || username.trimmedLength() > 15)
         {
-            Toast.makeText(this, "Usernames must have a minimum of 8 characters and a maximum of 15.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Usernames must have a minimum of 8 characters and a maximum of 15.", Toast.LENGTH_SHORT).show()
             b=false
         }
 
         //Check for spaces
+        //TODO: FIX WHITESPACES
         var result = username.filter { it.isWhitespace() }
         if(result.isNotBlank())
         {
-            Toast.makeText(this, "Passwords must not contain any white spaces.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Usernames must not contain any white spaces.", Toast.LENGTH_SHORT).show();
             b= false
         }
+
         //Check if username is already taken
+        val temp = userDao.getUsers()
+        if(temp!=null) {
+            for (i in 0 until temp.size) {
+
+                if (username.equals(temp.get(i)?.username)) {
+                    Toast.makeText(this, "Username already taken.", Toast.LENGTH_SHORT).show();
+
+                    b = false
+                }
+            }
+        }
 
         return b
     }
@@ -135,6 +230,7 @@ class EditProfileActivity : AppCompatActivity() {
         }
 
         //Check for spaces
+
         var result2 = password.filter { it.isWhitespace() }
         if(result2.isNotBlank())
         {
@@ -145,3 +241,4 @@ class EditProfileActivity : AppCompatActivity() {
     }
 
 }
+

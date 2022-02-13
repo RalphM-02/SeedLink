@@ -4,42 +4,42 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.text.trimmedLength
+import ph.edu.dlsu.mobdeve.g24.mco.seedlink.dao.LinkDao
+import ph.edu.dlsu.mobdeve.g24.mco.seedlink.dao.LinkDaoDatabase
+import ph.edu.dlsu.mobdeve.g24.mco.seedlink.dao.UserDao
+import ph.edu.dlsu.mobdeve.g24.mco.seedlink.dao.UserDaoDatabase
 import ph.edu.dlsu.mobdeve.g24.mco.seedlink.databinding.ActivityRegisterBinding
 
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding
+    lateinit var userDao: UserDao
+    lateinit var linkDao: LinkDao
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        userDao= UserDaoDatabase(applicationContext)
+        linkDao = LinkDaoDatabase(applicationContext)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
 
         //TODO: click on sign up confirm btn when enter is pressed
         binding.signupConfirmbtn.setOnClickListener {
-            var confirmPassword = binding.registerConfirmPassword.text.toString()
-            var password = binding.registerPassword.text.toString()
-            var username = binding.registerUsername.text.toString()
-            var links = ArrayList<String>()
-            populateList(links)
+            val confirmPassword = binding.registerConfirmPassword.text.toString()
+            val password = binding.registerPassword.text.toString()
+            val username = binding.registerUsername.text.toString()
 
-            //TODO: ADD POSTS
+
+
             if (confirmPassword.equals(password)) {
-
-                //TODO: Check input if it passed restrictions
-
-
                 if(checkUsername(username) && checkPassword(password)) {
-                    var temp: UserClass
-                    temp = UserClass(username, password, links)
+                    userDao.addUser(UserClass(username,password))
+                    var temp = userDao.getUser(username)
                     var bundle = Bundle()
-                    bundle.putString("user_bundle", temp.username)
-                    bundle.putString("pass_bundle", temp.pass)
-                    bundle.putStringArrayList("links_bundle", temp.links)
+                    bundle.putInt("id_bundle", temp!!.id)
                     var gotoProfileActivity =
                         Intent(applicationContext, ProfileActivity::class.java)
 
@@ -55,16 +55,6 @@ class RegisterActivity : AppCompatActivity() {
 
     }
 
-    private fun populateList(temp: ArrayList<String>) {
-
-        temp.add("www.website/sampleLink1");
-        temp.add("www.website/sampleLink2");
-        temp.add("www.website/sampleLink3");
-        temp.add("www.website/sampleLink4");
-        temp.add("www.website/sampleLink5");
-        temp.add("www.website/sampleLink6");
-
-    }
 
 
     private fun checkUsername(username: String ): Boolean {
@@ -81,10 +71,22 @@ class RegisterActivity : AppCompatActivity() {
         var result = username.filter { it.isWhitespace() }
         if(result.isNotBlank())
         {
-            Toast.makeText(this, "Passwords must not contain any white spaces.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Usernames must not contain any white spaces.", Toast.LENGTH_SHORT).show();
             b= false
         }
+
         //Check if username is already taken
+        val temp = userDao.getUsers()
+        if(temp!=null) {
+            for (i in 0 until temp.size) {
+
+                if (username.equals(temp.get(i)?.username)) {
+                    Toast.makeText(this, "Username already taken.", Toast.LENGTH_SHORT).show();
+
+                    b = false
+                }
+            }
+        }
 
         return b
     }
