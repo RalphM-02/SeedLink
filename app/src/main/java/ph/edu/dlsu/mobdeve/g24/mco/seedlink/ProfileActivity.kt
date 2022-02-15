@@ -126,7 +126,11 @@ class ProfileActivity: AppCompatActivity() {
         }
 
         binding.btnCreatePost.setOnClickListener {
+            var bundle = Bundle()
+            bundle.putString("username_bundle", user.username)
+
             val gotoCreatePostActivity = Intent(applicationContext, CreatePostActivity::class.java)
+            gotoCreatePostActivity.putExtras(bundle)
             startActivity(gotoCreatePostActivity)
         }
 
