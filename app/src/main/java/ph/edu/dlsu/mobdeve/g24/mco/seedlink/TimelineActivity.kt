@@ -1,5 +1,6 @@
 package ph.edu.dlsu.mobdeve.g24.mco.seedlink
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,9 +27,11 @@ class TimelineActivity : AppCompatActivity() {
         binding!!.rvPostList.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
 
         binding!!.rvPostList.adapter = timelineAdapter
+
         
         binding!!.btnGotoProfile.setOnClickListener {
-            // TODO: 2/16/2022  
+            // TODO: 2/16/2022
+
         }
 
         binding!!.btnCreatePost.setOnClickListener {
@@ -39,5 +42,14 @@ class TimelineActivity : AppCompatActivity() {
 
     fun populateList(){
         postList = postDao.getPosts()
+    }
+
+    fun viewProfile(id: Int){
+        var bundle = Bundle()
+        bundle.putInt("id_bundle", id)
+
+        val gotoProfileActivity = Intent(this, ProfileActivity::class.java)
+        gotoProfileActivity.putExtras(bundle)
+        startActivity(gotoProfileActivity)
     }
 }

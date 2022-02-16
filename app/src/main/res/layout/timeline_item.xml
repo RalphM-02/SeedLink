@@ -22,8 +22,8 @@
             app:layout_constraintRight_toRightOf="parent"
             android:src="@drawable/ic_profile_pic"/>
 
-        <TextView
-            android:id="@+id/tv_post_author"
+        <Button
+            android:id="@+id/btn_post_author"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/iv_image_post"
@@ -31,13 +31,15 @@
             app:layout_constraintRight_toRightOf="parent"
             android:padding="10dp"
             android:text="Username"
+            android:textColor="@color/darkGreen"
+            android:background="@android:color/transparent"
             android:gravity="left"/>
 
         <TextView
             android:id="@+id/tv_post_caption"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/tv_post_author"
+            app:layout_constraintTop_toBottomOf="@+id/btn_post_author"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:padding="10dp"

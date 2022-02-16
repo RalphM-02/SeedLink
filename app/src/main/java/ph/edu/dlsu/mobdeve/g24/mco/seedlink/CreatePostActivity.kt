@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -26,8 +27,15 @@ class CreatePostActivity : AppCompatActivity() {
         val getImage = registerForActivityResult(
             ActivityResultContracts.GetContent(),
             ActivityResultCallback {
-                binding!!.ivPostImage.setImageURI(it)
-                postImage = URItoBytes(applicationContext, it)!!
+
+                if(it== null)
+                {
+                    Toast.makeText(this, "Please choose a picture", Toast.LENGTH_SHORT).show();
+
+                }else {
+                    binding!!.ivPostImage.setImageURI(it)
+                    postImage = URItoBytes(applicationContext, it)!!
+                }
             }
         )
 
