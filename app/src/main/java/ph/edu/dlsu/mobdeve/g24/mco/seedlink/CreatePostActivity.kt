@@ -1,6 +1,7 @@
 package ph.edu.dlsu.mobdeve.g24.mco.seedlink
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.result.ActivityResultCallback
@@ -37,6 +38,11 @@ class CreatePostActivity : AppCompatActivity() {
         binding!!.btnPostImage.setOnClickListener {
             var caption = binding!!.etEnterCaption.text.toString()
             postDao.addPost(author!!, postImage, caption)
+            var b = Bundle()
+            b.putString("user_username", author)
+            val gotoTimelineActivity = Intent(applicationContext, TimelineActivity::class.java)
+            startActivity(gotoTimelineActivity)
+
         }
 
 

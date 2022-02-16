@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
                     var gotoProfileActivity = Intent(applicationContext, ProfileActivity::class.java)
 
                     gotoProfileActivity.putExtras(bundle)
-
+                    sharedPrefUtility.saveStringPreferences("user_username", username)
                     startActivity(gotoProfileActivity)
 
                 }else{

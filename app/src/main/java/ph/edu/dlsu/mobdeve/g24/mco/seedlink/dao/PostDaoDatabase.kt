@@ -74,7 +74,7 @@ class PostDaoDatabase: PostDao {
 
     }
 
-    override fun getProfilePosts(username: String): ArrayList<PostClass?>? {
+    override fun getProfilePosts(username: String): ArrayList<PostClass?> {
         val result = ArrayList<PostClass?>()
         val columns = arrayOf<String>(
             PostDatabase.AUTHOR,
