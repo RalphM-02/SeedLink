@@ -22,6 +22,7 @@ class CreatePostActivity : AppCompatActivity() {
         setContentView(binding!!.root)
         var bundle = intent.extras
         var author = bundle!!.getString("username_bundle")
+        var userid = bundle.getInt("userid_bundle")
         postDao = PostDaoDatabase(applicationContext)
 
         val getImage = registerForActivityResult(
@@ -47,10 +48,11 @@ class CreatePostActivity : AppCompatActivity() {
             var caption = binding!!.etEnterCaption.text.toString()
             postDao.addPost(author!!, postImage, caption)
             var b = Bundle()
-            b.putString("user_username", author)
+            b.putString("username_bundle", author)
+            b.putInt("userid_bundle", userid)
             val gotoTimelineActivity = Intent(applicationContext, TimelineActivity::class.java)
+            gotoTimelineActivity.putExtras(b)
             startActivity(gotoTimelineActivity)
-
         }
 
 

@@ -126,12 +126,23 @@ class ProfileActivity: AppCompatActivity() {
         }
 
         binding.btnCreatePost.setOnClickListener {
-            var bundle = Bundle()
-            bundle.putString("username_bundle", user.username)
+            var b = Bundle()
+            b.putString("username_bundle", user.username)
+            b.putInt("userid_bundle", user.id)
 
             val gotoCreatePostActivity = Intent(applicationContext, CreatePostActivity::class.java)
-            gotoCreatePostActivity.putExtras(bundle)
+            gotoCreatePostActivity.putExtras(b)
             startActivity(gotoCreatePostActivity)
+        }
+
+        binding.btnGotoHome.setOnClickListener {
+            var bHome = Bundle()
+            bHome.putInt("userid_bundle", user.id)
+            bHome.putString("username_bundle", user.username)
+
+            val gotoTimelineActivity = Intent(applicationContext, TimelineActivity::class.java)
+            gotoTimelineActivity.putExtras(bHome)
+            startActivity(gotoTimelineActivity)
         }
 
     }

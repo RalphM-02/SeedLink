@@ -19,7 +19,8 @@ class TimelineActivity : AppCompatActivity() {
         setContentView(binding!!.root)
         postDao = PostDaoDatabase(applicationContext)
         var bundle = intent.extras
-        //var username = bundle!!.getString("user_username")
+        var username = bundle!!.getString("username_bundle")
+        var userid = bundle.getInt("userid_bundle")
 
         populateList()
         timelineAdapter = TimelineAdapter(applicationContext, postList)
@@ -30,12 +31,19 @@ class TimelineActivity : AppCompatActivity() {
 
         
         binding!!.btnGotoProfile.setOnClickListener {
-            // TODO: 2/16/2022
-
+            var b = Bundle()
+            b.putInt("id_bundle", userid)
+            val gotoProfileActivity = Intent(applicationContext, ProfileActivity::class.java)
+            gotoProfileActivity.putExtras(b)
+            startActivity(gotoProfileActivity)
         }
 
         binding!!.btnCreatePost.setOnClickListener {
-            // TODO: 2/16/2022
+            var bCreate = Bundle()
+            bCreate.putString("username_bundle", username)
+            val gotoCreatePostActivity = Intent(applicationContext, CreatePostActivity::class.java)
+            gotoCreatePostActivity.putExtras(bCreate)
+            startActivity(gotoCreatePostActivity)
         }
 
     }
