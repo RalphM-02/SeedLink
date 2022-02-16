@@ -53,6 +53,7 @@ class CreatePostActivity : AppCompatActivity() {
             val gotoTimelineActivity = Intent(applicationContext, TimelineActivity::class.java)
             gotoTimelineActivity.putExtras(b)
             startActivity(gotoTimelineActivity)
+            finish()
         }
 
 
