@@ -2,6 +2,7 @@ package ph.edu.dlsu.mobdeve.g24.mco.seedlink
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -29,8 +30,10 @@ class TimelineAdapter (private val context: Context, private var posts: ArrayLis
 
     inner class ViewHolder(private val itemBinding: TimelineItemBinding): RecyclerView.ViewHolder(itemBinding.root){
         fun bindPost(post: PostClass){
+            val i = BitmapFactory.decodeByteArray(post.image, 0, post.image.size)
+
             itemBinding.btnPostAuthor.text = post.author
-            itemBinding.ivImagePost.setImageBitmap(BitmapFactory.decodeByteArray(post.image, 0, post.image.size))
+            itemBinding.ivImagePost.setImageBitmap(i)
             itemBinding.tvPostCaption.text = post.caption
 
 

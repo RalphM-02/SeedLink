@@ -43,7 +43,7 @@ class PostDaoDatabase: PostDao {
         database = postDatabase!!.readableDatabase
 
         val cursor = database!!.query(
-            PostDatabase.TABLEPOSTS,
+            TABLEPOSTS,
             columns,
             null,
             null,
@@ -62,9 +62,7 @@ class PostDaoDatabase: PostDao {
             cursor.moveToNext()
         }
 
-        if(cursor != null){
-            cursor.close()
-        }
+        cursor.close()
 
         if(database != null){
             postDatabase!!.close()
@@ -105,9 +103,7 @@ class PostDaoDatabase: PostDao {
             cursor.moveToNext()
         }
 
-        if(cursor != null){
-            cursor.close()
-        }
+        cursor.close()
 
         if(database != null){
             postDatabase!!.close()
