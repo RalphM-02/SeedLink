@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import ph.edu.dlsu.mobdeve.g24.mco.seedlink.dao.LinkDao
 import ph.edu.dlsu.mobdeve.g24.mco.seedlink.dao.LinkDaoDatabase
 import ph.edu.dlsu.mobdeve.g24.mco.seedlink.dao.UserDao
@@ -11,6 +12,7 @@ import ph.edu.dlsu.mobdeve.g24.mco.seedlink.dao.UserDaoDatabase
 import ph.edu.dlsu.mobdeve.g24.mco.seedlink.databinding.ActivityMainBinding
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
 
@@ -64,6 +66,7 @@ class MainActivity : AppCompatActivity() {
             //Go to profile activity
             val gotoRegisterActivity = Intent(applicationContext, RegisterActivity::class.java)
             startActivity(gotoRegisterActivity)
+            finish()
 
         }
         initPrefs()
@@ -75,6 +78,7 @@ class MainActivity : AppCompatActivity() {
             Toast.LENGTH_LONG
         ).show()
     }
+
     fun initPrefs(){
         sharedPrefUtility = SharePrefUtility(this)
     }
@@ -89,4 +93,30 @@ class MainActivity : AppCompatActivity() {
         sharedPrefUtility.saveStringPreferences("app_closed", Date().toString())
     }
 
+
+    override fun onBackPressed() {
+        val builder = android.app.AlertDialog.Builder(this)
+        //set title for alert dialog
+        builder.setTitle("Exit App")
+        //set message for alert dialog
+        builder.setMessage("Click yes to close app")
+        builder.setIcon(R.drawable.ic_warning)
+
+        //performing positive action
+        builder.setPositiveButton("Yes"){dialogInterface, which ->
+           super.onBackPressed()
+            exitProcess(0)
+            finish()
+        }
+        //performing negative action
+        builder.setNegativeButton("No"){dialogInterface, which ->
+            Toast.makeText(this,"Exit Cancelled",Toast.LENGTH_LONG).show()
+        }
+        val alertDialog: android.app.AlertDialog = builder.create()
+
+
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+
+    }
 }

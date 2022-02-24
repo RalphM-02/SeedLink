@@ -1,6 +1,7 @@
 package ph.edu.dlsu.mobdeve.g24.mco.seedlink
 
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -53,17 +54,19 @@ class ProfileActivity: AppCompatActivity() {
             )
                 .show()
         
-        var image = pfpDao.getPfp(id)
-        if(image != null){
-            val bmp = BitmapFactory.decodeByteArray(image, 0, image.size)
-            binding.viewPic.setImageBitmap(bmp)
+        var img = pfpDao.getPfp(id)
 
-        }else
+        if(img.size == 0 )
             binding.viewPic.setImageResource(R.drawable.ic_profile_pic)
+        else{
+            //bytearray to new risized bitmap factory
+            val resize: Bitmap = BitmapFactory.decodeByteArray(img, 0, img.size)
+            binding.viewPic.setImageBitmap(Bitmap.createScaledBitmap(resize, 120, 120, false));
+
+        }
 
 
         binding.viewUsername.text = user.username
-        //TODO: Hide Password
         binding.viewPassword.text = user.pass
 
         if(linkDao.getLinks(user.id) == null){
@@ -75,6 +78,12 @@ class ProfileActivity: AppCompatActivity() {
 
         setRecyclerView()
 
+        binding.logoutbtn.setOnClickListener {
+            var gotoMainActivity = Intent(applicationContext,MainActivity::class.java)
+            startActivity(gotoMainActivity)
+            finish()
+        }
+
         binding.editbtn.setOnClickListener{
             var editbundle = Bundle()
             editbundle.putInt("id_bundle", user.id)
@@ -84,6 +93,8 @@ class ProfileActivity: AppCompatActivity() {
             gotoEditProfileActivity.putExtras(bundle)
 
             startActivity(gotoEditProfileActivity)
+            finish()
+
 
         }
 
@@ -133,6 +144,7 @@ class ProfileActivity: AppCompatActivity() {
             val gotoCreatePostActivity = Intent(applicationContext, CreatePostActivity::class.java)
             gotoCreatePostActivity.putExtras(b)
             startActivity(gotoCreatePostActivity)
+            finish()
         }
 
         binding.btnGotoHome.setOnClickListener {

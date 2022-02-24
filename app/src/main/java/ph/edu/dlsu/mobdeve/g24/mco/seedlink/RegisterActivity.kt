@@ -46,6 +46,7 @@ class RegisterActivity : AppCompatActivity() {
                     gotoProfileActivity.putExtras(bundle)
 
                     startActivity(gotoProfileActivity)
+                    finish()
                 }
             } else
                 Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
