@@ -1,12 +1,18 @@
 package ph.edu.dlsu.mobdeve.g24.mco.seedlink
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import ph.edu.dlsu.mobdeve.g24.mco.seedlink.dao.PostDao
 import ph.edu.dlsu.mobdeve.g24.mco.seedlink.dao.PostDaoDatabase
 import ph.edu.dlsu.mobdeve.g24.mco.seedlink.databinding.ActivityTimelineBinding
+import com.facebook.FacebookSdk
+import com.facebook.appevents.AppEventsLogger
+import com.facebook.share.model.SharePhoto
+import com.facebook.share.model.SharePhotoContent
+import com.facebook.share.widget.ShareDialog
 
 class TimelineActivity : AppCompatActivity() {
     var binding: ActivityTimelineBinding? = null
@@ -60,5 +66,12 @@ class TimelineActivity : AppCompatActivity() {
         val gotoProfileActivity = Intent(this, ProfileActivity::class.java)
         gotoProfileActivity.putExtras(bundle)
         startActivity(gotoProfileActivity)
+    }
+
+    fun sharePost(post: PostClass){
+        val image = BitmapFactory.decodeByteArray(post.image, 0, post.image.size)
+        val photo = SharePhoto.Builder().setBitmap(image).build()
+        val content = SharePhotoContent.Builder().addPhoto(photo).build()
+        ShareDialog.show(this@TimelineActivity, content)
     }
 }
