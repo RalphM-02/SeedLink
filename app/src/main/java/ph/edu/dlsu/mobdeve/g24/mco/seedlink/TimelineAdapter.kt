@@ -43,6 +43,10 @@ class TimelineAdapter (private val context: Context, private var posts: ArrayLis
 
                 (itemBinding.root.context as TimelineActivity).viewProfile(profileUser!!.id)
             }
+
+            itemBinding.btnShareFacebook.setOnClickListener {
+                (itemBinding.root.context as TimelineActivity).sharePost(post)
+            }
         }
 
 //        init {
