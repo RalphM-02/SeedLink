@@ -153,8 +153,7 @@ class ProfilePicActivity : AppCompatActivity() {
             val resize: Bitmap = BitmapFactory.decodeByteArray(pfp, 0, pfp.size)
             binding.viewPic.setImageBitmap(Bitmap.createScaledBitmap(resize, 120, 120, false));
 
-        } else
-            Toast.makeText(this, "Error Uploading Picture", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun URItoBytes(context: Context, uri: Uri): ByteArray? =
