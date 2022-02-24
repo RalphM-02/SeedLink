@@ -44,6 +44,7 @@ class TimelineActivity : AppCompatActivity() {
             val gotoCreatePostActivity = Intent(applicationContext, CreatePostActivity::class.java)
             gotoCreatePostActivity.putExtras(bCreate)
             startActivity(gotoCreatePostActivity)
+            finish()
         }
 
     }

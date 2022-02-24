@@ -18,13 +18,11 @@ class AddLinkDialog: DialogFragment() {
     private lateinit var binding: AddLinkDialogBinding
     private lateinit var viewModel: AddLinkViewModel
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         getDialog()!!.getWindow()?.setBackgroundDrawableResource(R.drawable.rounded_corner);
 
         return inflater.inflate(R.layout.add_link_dialog, container, false)
-
-
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

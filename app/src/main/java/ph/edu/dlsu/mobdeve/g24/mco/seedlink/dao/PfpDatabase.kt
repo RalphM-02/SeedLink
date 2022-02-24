@@ -27,7 +27,7 @@ class PfpDatabase (context: Context?) :
         const val PFP = "pfp"
         const val USERID = "user_id"
         private const val CREATE_PFP_TABLE = ("create table " + TABLEPFP + " ( "
-                + USERID + " integer primary key autoincrement, "
+                + USERID + " integer, "
                 + PFP + " BLOB); ")
 
     }

@@ -26,7 +26,7 @@ class LinkDatabase (context: Context?) :
         const val LINK = "link"
         const val USERID = "user_id"
         private const val CREATE_LINK_TABLE = ("create table " + TABLELINKS + " ( "
-                + USERID+ " integer primary key autoincrement, "
+                + USERID+ " integer, "
                 + LINK + " text ); ")
 
     }

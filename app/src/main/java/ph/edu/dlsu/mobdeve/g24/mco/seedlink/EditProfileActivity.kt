@@ -28,6 +28,7 @@ class EditProfileActivity : AppCompatActivity() {
     private lateinit var adapter: EditProfileAdapter
     private lateinit var binding: ActivityEditBinding
     private lateinit var addLinkViewModel: AddLinkViewModel
+    private var pendingLinks: ArrayList<String> = arrayListOf()
     private var linkList: MutableList<String> = mutableListOf()
     lateinit var linkDao: LinkDao
     lateinit var userDao: UserDao
@@ -58,14 +59,15 @@ class EditProfileActivity : AppCompatActivity() {
                 Toast.LENGTH_SHORT
             )
                 .show()
-        var image = pfpDao.getPfp(id)
-
-        if(image != null){
-            val bmp = BitmapFactory.decodeByteArray(image, 0, image.size)
-            binding.viewPic.setImageBitmap(bmp)
-
-        }else
+        var img = pfpDao.getPfp(id)
+        if(img.size == 0 )
             binding.viewPic.setImageResource(R.drawable.ic_profile_pic)
+        else{
+            //bytearray to new risized bitmap factory
+            val resize: Bitmap = BitmapFactory.decodeByteArray(img, 0, img.size)
+            binding.viewPic.setImageBitmap(Bitmap.createScaledBitmap(resize, 120, 120, false));
+
+        }
 
 
         binding.editPasswordLayout.hint = "Old Password: " + userOld.pass
@@ -82,71 +84,98 @@ class EditProfileActivity : AppCompatActivity() {
 
 
         binding.addbtn.setOnClickListener(){
-            if (userOld.username != null) {
+            if (userOld.username.length > 0) {
 
                 AddLinkDialog().show(supportFragmentManager, AddLinkDialog.TAG)
 
                 addLinkViewModel = ViewModelProvider(this).get(AddLinkViewModel::class.java)
+
                 addLinkViewModel.link.observe(this, Observer {
-
-                    if(it.equals(""))
-                        Toast.makeText(this, "Link Addition Unsuccessful: Empty String", Toast.LENGTH_SHORT).show()
-                    else {
-                        val res = linkDao.addLink(userOld.id, it)
-
-                        if (res > 0) {
-                            adapter.addLink(it)
-                            Toast.makeText(
-                                this,
-                                "Link Addition Successful.",
-                                Toast.LENGTH_SHORT
-                            )
-                                .show()
-                        }
-                        else
-                            Toast.makeText(
-                                this,
-                                "Link Addition Unsuccessful: LinkDB Error",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                    if(it.toString()!= "" && it.toString().length > 0) {
+                        pendingLinks.add(it.toString())
+                        adapter.addLink(it)
+                        addLinkViewModel.sendLink("")
                     }
-                })
+            })
             }else
-                Toast.makeText(this, "Link Addition Unsuccessful: UserDB Error ", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Link Addition Unsuccessful: UserDB Error ", Toast.LENGTH_SHORT).show()
 
 
-        }
+
+
+    }
         binding.savebtn.setOnClickListener() {
 
             //Input
             var user = binding.editUsername.text.toString()
             var pass = binding.editPassword.text.toString()
 
-            if (checkUsername(user) && checkPassword(pass)) {
+
+
+                //add new links
+            for (x in pendingLinks) {
+                if (x.equals("") && x.length == 0)
+                    Toast.makeText(
+                        this,
+                        "Empty String",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                else {
+
+                    val res = linkDao.addLink(userOld.id, x)
+
+                    if (res > 0) {
+                        Toast.makeText(
+                            this,
+                            "Link Addition Successful.",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                    } else
+                        Toast.makeText(
+                            this,
+                            "Link Addition Unsuccessful: LinkDB Error",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                }
+            }
+
+            var user_changed = true
+            var pw_changed = true
                 //Save Changes to db
-                if (user.equals(""))
+                if (user.equals("")||user.length==0){
+                    user_changed = false
                     user = userOld.username
+                }
 
-                if (pass.equals(""))
-                    pass = userOld.pass.toString()
+                if (pass.equals("")|| user.length ==0){
+                    pw_changed = false
+                    pass = userOld.pass
+                }
 
-                //TODO: Remove whitespaces
+            if (checkUsername(user,user_changed) && checkPassword(pass)) {
 
-                var temp = UserClass(userOld!!.id, user, pass)
-                userDao.updateUser(temp)
+                if (user_changed || pw_changed) {
+                    var temp = UserClass(userOld!!.id, user, pass)
+                    userDao.updateUser(temp)
+                }
 
 
                 //Prep for next activity
                 var editbundle = Bundle()
-                editbundle.putString("user_bundle", user)
-                editbundle.putString("pass_bundle", pass)
+                editbundle.putInt("id_bundle", userOld.id)
                 var gotoProfileActivity = Intent(applicationContext, ProfileActivity::class.java)
 
                 gotoProfileActivity.putExtras(editbundle)
 
                 startActivity(gotoProfileActivity)
-            } else
-                Toast.makeText(this, "Save Unsuccessful", Toast.LENGTH_SHORT).show()
+                finish()
+            }else
+                Toast.makeText(
+                    this,
+                    "Save Unsuccessful",
+                    Toast.LENGTH_SHORT
+                ).show()
         }
 
         binding.editPic.setOnClickListener(){
@@ -156,6 +185,7 @@ class EditProfileActivity : AppCompatActivity() {
                 val gotoProfilePicActivity = Intent(applicationContext, ProfilePicActivity::class.java)
                 gotoProfilePicActivity.putExtras(editbundle2)
                 startActivity(gotoProfilePicActivity)
+                finish()
             }
             else
                 Toast.makeText(this, "Can't Edit Pfp: UserDB Error", Toast.LENGTH_SHORT).show()
@@ -177,7 +207,7 @@ class EditProfileActivity : AppCompatActivity() {
     }
 
 
-    private fun checkUsername(username: String ): Boolean {
+    private fun checkUsername(username: String, changed : Boolean ): Boolean {
         var b = true
 
         //usernameS: MIN: 8; MAX:15
@@ -188,7 +218,6 @@ class EditProfileActivity : AppCompatActivity() {
         }
 
         //Check for spaces
-        //TODO: FIX WHITESPACES
         var result = username.filter { it.isWhitespace() }
         if(result.isNotBlank())
         {
@@ -196,15 +225,18 @@ class EditProfileActivity : AppCompatActivity() {
             b= false
         }
 
-        //Check if username is already taken
-        val temp = userDao.getUsers()
-        if(temp!=null) {
-            for (i in 0 until temp.size) {
 
-                if (username.equals(temp.get(i)?.username)) {
-                    Toast.makeText(this, "Username already taken.", Toast.LENGTH_SHORT).show();
+        if(changed){
+            //Check if username is already taken
+            val temp = userDao.getUsers()
+            if(temp!=null) {
+                for (i in 0 until temp.size) {
 
-                    b = false
+                    if (username.equals(temp.get(i)?.username)) {
+                        Toast.makeText(this, "Username already taken.", Toast.LENGTH_SHORT).show();
+
+                        b = false
+                    }
                 }
             }
         }

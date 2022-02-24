@@ -3,7 +3,6 @@ package ph.edu.dlsu.mobdeve.g24.mco.seedlink.dao
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
-import ph.edu.dlsu.mobdeve.g24.mco.seedlink.UserClass
 import ph.edu.dlsu.mobdeve.g24.mco.seedlink.dao.PfpDatabase.Companion.TABLEPFP
 
 class PfpDaoDatabase: PfpDao {
@@ -83,7 +82,7 @@ class PfpDaoDatabase: PfpDao {
         values.put(PfpDatabase.PFP, pfp)
 
         val result: Int = database!!.update(
-            UserDatabase.TABLEUSERS,
+            TABLEPFP,
             values,
             PfpDatabase.USERID+ " = ?" ,
             arrayOf(id.toString()))
